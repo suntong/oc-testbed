@@ -1,0 +1,19 @@
+{
+  "name": "OpenCode AI Software Factory Monorepo",
+  // Change "suntong" to your actual GitHub username or organization name target
+  "image": "ghcr.io/suntong/oc-testbed-go:latest",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "golang.go",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/on-create.sh",
+  "remoteUser": "vscode"
+}

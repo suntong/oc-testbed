@@ -1,0 +1,19 @@
+ARG BASE_IMAGE=ghcr.io/suntong/oc-testbed-base:latest
+FROM ${BASE_IMAGE}
+
+USER root
+
+# Install Golang distribution binary layer
+ENV GO_VERSION=1.22.4
+RUN curl -fsSL "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o golang.tar.gz \
+    && tar -C /usr/local -xzf golang.tar.gz \
+    && rm golang.tar.gz
+
+ENV GOPATH=/home/vscode/go
+ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+
+# Install Go Language Server (gopls) into system environment tools path
+RUN /usr/local/go/bin/go install golang.org/x/tools/gopls@latest \
+    && chown -R vscode:vscode /home/vscode/go
+
+USER vscode
