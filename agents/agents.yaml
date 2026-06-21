@@ -1,0 +1,9 @@
+agents:
+  planner:
+    skill: brainstorming
+  researcher:
+    skill: writing-plans
+  coder:
+    skill: executing-plans
+  reviewer:
+    skill: systematic-debugging

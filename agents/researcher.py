@@ -1,3 +1,6 @@
 from .base_agent import BaseAgent
+
+
 class ResearchAgent(BaseAgent):
-    def lookup(self, topic: str) -> str: return self.call(prompt=topic, system="You are a researcher. Provide technical context.")
+    def lookup(self, topic: str) -> str:
+        return self.call(prompt=topic)
