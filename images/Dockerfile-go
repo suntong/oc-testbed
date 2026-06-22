@@ -1,3 +1,5 @@
+# -*- Dockerfile -*-
+
 ARG BASE_IMAGE=ghcr.io/suntong/oc-testbed-base:latest
 FROM ${BASE_IMAGE}
 
@@ -15,5 +17,10 @@ ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 # Install Go Language Server (gopls) into system environment tools path
 RUN /usr/local/go/bin/go install golang.org/x/tools/gopls@latest \
     && chown -R vscode:vscode /home/vscode/go
+
+# Append Go LSP to OpenCode configuration
+RUN jq '.lsp += { "gopls": {"command": ["/home/vscode/go/bin/gopls"],"extensions": [".go"]} }' /home/vscode/.config/opencode/opencode.jsonc \
+  > /tmp/config.tmp && mv /tmp/config.tmp /home/vscode/.config/opencode/opencode.jsonc \
+  && chown vscode:vscode /home/vscode/.config/opencode/opencode.jsonc
 
 USER vscode

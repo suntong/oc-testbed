@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \
     sudo \
     ca-certificates \
+    nano \
     && apt-get clean && rm -rf /var/lib/apt/lists/* && echo apt-get done
 
 # Install Node.js 20 & global JavaScript LSP tools (Skipping heavy Python LSPs)
@@ -17,7 +18,27 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && npm install -g typescript typescript-language-server opencode-ai@latest \
     && apt-get clean && rm -rf /var/lib/apt/lists/* && echo node done
 
+# Install Python requirements globally
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --break-system-packages -r /tmp/requirements.txt && rm /tmp/requirements.txt
+
 # Configure standard user schema to align with standard DevContainer runtimes
 RUN useradd -m -s /bin/bash vscode && echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Create OpenCode config
+RUN mkdir -p /home/vscode/.config/opencode
+COPY opencode.jsonc /home/vscode/.config/opencode/opencode.jsonc
+
+# Clone superpowers skills repository and symlink into OpenCode skills
+RUN git clone --depth=1 https://github.com/obra/superpowers.git /home/vscode/.superpowers \
+    && mkdir -p /home/vscode/.config/opencode/skills \
+    && find /home/vscode/.superpowers/skills -mindepth 1 -maxdepth 1 -exec ln -sfn {} /home/vscode/.config/opencode/skills/ \;
+
+# Configure bash init
+COPY .bashrc /home/vscode/.bashrc
+
+# Fix ownership of all vscode home files
+RUN chown -R vscode:vscode /home/vscode
+
 USER vscode
 WORKDIR /workspace

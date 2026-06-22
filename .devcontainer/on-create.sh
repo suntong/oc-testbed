@@ -18,14 +18,15 @@ if ! grep -q "source \$(pwd)/.venv/bin/activate" ~/.bashrc; then
     echo "source \$(pwd)/.venv/bin/activate" >> ~/.bashrc
 fi
 
-# Synclink workspace skills natively
+# Synclink workspace skills natively - pull latest and re-symlink
 SUPERPOWERS_DIR="$HOME/.superpowers"
-if [ ! -d "$SUPERPOWERS_DIR" ]; then
-    git clone --depth=1 https://github.com/obra/superpowers.git "$SUPERPOWERS_DIR"
+if [ -d "$SUPERPOWERS_DIR" ]; then
+    git -C "$SUPERPOWERS_DIR" pull --rebase --ff-only 2>/dev/null || git -C "$SUPERPOWERS_DIR" pull --rebase
 fi
 
 OPENCODE_SKILLS="$HOME/.config/opencode/skills"
 mkdir -p "$OPENCODE_SKILLS"
+rm -f "$OPENCODE_SKILLS"/*
 
 if [ -d "$SUPERPOWERS_DIR/skills" ]; then
     find "$SUPERPOWERS_DIR/skills" -mindepth 1 -maxdepth 1 -exec ln -sfn {} "$OPENCODE_SKILLS/" \;

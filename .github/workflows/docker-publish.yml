@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: images/Dockerfile.base
+          file: images/Dockerfile-base
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ steps.repo_setup.outputs.REPO_LOWER }}-base:latest
@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: images/Dockerfile.go
+          file: images/Dockerfile-go
           push: true
           build-args: |
             BASE_IMAGE=${{ env.REGISTRY }}/${{ steps.repo_setup.outputs.REPO_LOWER }}-base:latest

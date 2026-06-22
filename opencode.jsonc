@@ -1,0 +1,39 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "{env:OPENCODE_MODEL}",
+
+  "provider": {
+    "opencode": {
+      "name": "OpenCode",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "{env:OPENCODE_BASE_URL}",
+        "apiKey": "{env:OPENCODE_API_KEY}"
+      }
+    },
+    "nim": {
+      "name": "NVIDIA NIM",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "{env:NVIDIA_BASE_URL}",
+        "apiKey": "{env:NVIDIA_API_KEY}"
+      }
+    }
+  },
+
+  "lsp": {
+    "typescript-language-server": {
+      "command": ["/usr/local/bin/typescript-language-server", "--stdio"],
+      "extensions": [".js", ".ts", ".jsx", ".tsx"]
+    }
+  },
+
+  "command": {
+    "pwd":  { "template": "Print the current working directory path" },
+    "ccd":  { "template": "Change the working directory to {args} and list its contents" },
+    "ls":   { "template": "Run ls -lah and summarize the results" },
+    "cat":  { "template": "Read and display the content of file {args}" },
+    "git":  { "template": "Run git command: git {args}, then explain the results" },
+    "bash": { "template": "Execute the following bash command: {args}" }
+  }
+}
